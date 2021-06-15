@@ -1,0 +1,81 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+
+    compileSdkVersion 30
+    buildToolsVersion "30.0.2"
+
+    defaultConfig {
+        applicationId "com.fss.owspace"
+        minSdkVersion 16
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        //解决 Caused by: com.android.tools.r8.utils.b: Cannot fit requested classes in a single dex file (# methods: 67771 > 65536)
+        //引用第三方库的jar文件，都有可能会触发这个错误
+        // 主要原因是你的项目貌似有点大，已经超过65k个方法。一个dex已经装不下了，需要个多个dex，也就是multidex ，因为Android系统定义总方法数是一个short int，short int 最大值为65536
+        multiDexEnabled true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+}
+//解决aar文件  Could not find :SildeMenulibrary-release:. Required by: project :app
+repositories{
+    flatDir{
+        dirs 'libs'
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation 'androidx.core:core:1.5.0-alpha05'
+
+    implementation(name: 'SildeMenulibrary-release', ext: 'aar')
+    implementation(name: 'ObservableScrollView-release', ext: 'aar')
+
+    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
+    //Retrofit基于okhttp封装的网络请求框架
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    //注解
+    implementation 'com.google.dagger:dagger:2.14.1'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.14.1'
+    //日志打印
+    implementation 'com.orhanobut:logger:2.2.0'
+    //字体
+    implementation 'uk.co.chrisjenx:calligraphy:2.2.0'
+    //时间处理
+    implementation 'net.danlew:android.joda:2.9.3'
+    implementation 'com.google.code.gson:gson:2.8.0'
+    //处理权限的库
+    implementation 'pub.devrel:easypermissions:2.0.1'
+    //专注于Android系统的View注入框架
+    implementation 'com.jakewharton:butterknife:10.2.3'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
+
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+    implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
+
+
+}
